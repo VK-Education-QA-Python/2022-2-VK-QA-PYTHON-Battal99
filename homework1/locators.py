@@ -12,13 +12,10 @@ INPUT_FIO = (By.CLASS_NAME, "js-form-element")
 BUTTON_SAVE = (By.CLASS_NAME, "button__text")
 
 PROFILE_LOCATOR = (By.XPATH, "//ul/li[6]/a[contains(@class, 'center-module-profile')]")
-# PRO_LOCATOR = (By.CLASS_NAME, "center-module-pro-1lbACy")
 PRO_LOCATOR = (By.XPATH, "//ul/li[5]/a[contains(@class, 'center-module-pro')]")
 STATISTICS_LOCATOR = (By.XPATH, "//ul/li[4]/a[contains(@class, 'center-module-statistics')]")
 BILLING_LOCATOR = (By.XPATH, "//ul/li[3]/a[contains(@class, 'center-module-billing')]")
-# SEGMENTS_LOCATOR = (By.CLASS_NAME, "center-module-segments-1MqckW")
 SEGMENTS_LOCATOR = (By.XPATH, "//ul/li[2]/a[contains(@class, 'center-module-segments')]")
-# CAMPAIGNS_LOCATOR = (By.CLASS_NAME, "center-module-campaigns-3KazFg")
 TOOLS_LOCATOR = (By.XPATH, "//ul/li[7]/a[contains(@class, 'center-module-tools')]")
 
 BUTTON_PAYMENT_SUBMIT = (By.CLASS_NAME, "js-deposit-payment-submit")

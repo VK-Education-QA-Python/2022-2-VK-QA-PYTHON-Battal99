@@ -6,13 +6,15 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.remote.webelement import WebElement
-from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
-import time
+from selenium.common.exceptions import WebDriverException
+
+from retry import retry
 
 
 class BaseCase:
-    driver = None
+    driver: WebElement = None
 
     @pytest.fixture(scope='function', autouse=True)
     def setup(self, driver):
@@ -23,6 +25,7 @@ class BaseCase:
         wait = WebDriverWait(self.driver, 10)
         return wait.until(EC.element_to_be_clickable((by, what)))
 
+    @retry(NoSuchElementException, tries=10, delay=0.5)
     def find(self, by: By, what: str) -> WebElement:
         return self.driver.find_element(by, what)
 
@@ -42,12 +45,10 @@ class BaseCase:
     def logout(self) -> bool:
         """ метод выхода с аккаунта """
         try:
-            time.sleep(2)
-            elem_1 = self.find_wait(*locators.MAIL_LOCATOR)
-            elem_1.click()
-            time.sleep(2)
-            elem_exit = self.find_wait(*locators.EXIT_BUTTON)
-            elem_exit.click()
+            elem_1 = self.find(*locators.MAIL_LOCATOR)
+            self.click_element(elem_1)
+            elem_exit = self.find(*locators.EXIT_BUTTON)
+            self.click_element(elem_exit)
         except NoSuchElementException:
             return False
         return True
@@ -56,6 +57,10 @@ class BaseCase:
         """ Метод перехода на страницы """
         element_page = self.find_wait(*page)
         element_page.click()
-        # time.sleep(3)
         page_locator = self.find_wait(*locator)
         return page_locator
+
+    @retry(WebDriverException, tries=10, delay=0.5)
+    def click_element(self, element: WebElement):
+        if element.is_displayed():
+            element.click()
