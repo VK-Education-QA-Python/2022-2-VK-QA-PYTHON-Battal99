@@ -1,9 +1,9 @@
 import pytest
-
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
 from webdriver_manager.chrome import ChromeDriverManager
+
+from homework1.settings import URL
 
 
 def pytest_addoption(parser):
@@ -13,18 +13,19 @@ def pytest_addoption(parser):
 @pytest.fixture()
 def config(request):
     headless = request.config.getoption("--headless")
+
     return headless
 
 
 @pytest.fixture(scope='function')
 def driver(config, request):
     options = Options()
-    site: str = "https://target-sandbox.my.com/"
     if request.config.option.headless:
         options.add_argument('--headless')
-        options.add_argument('disable-dev-shm-usage')
     driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
-    driver.get(site)
-    driver.maximize_window()
+    driver.set_window_size(1920, 1080)
+    driver.get(URL)
+
     yield driver
+
     driver.quit()
