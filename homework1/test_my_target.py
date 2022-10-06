@@ -24,7 +24,6 @@ class TestMyTarget(BaseCase):
     def test_logout(self):
         """ Тест выхода из аккаунта """
         self.log_in(LOGIN, PASSWORD)
-        time.sleep(3)
         logout = self.log_out()
 
         assert logout is True
@@ -56,8 +55,8 @@ class TestMyTarget(BaseCase):
         """ Тест на редактирование профиля """
         self.log_in(LOGIN, PASSWORD)
 
-        random_size_str: int = randint(1, 100)
-        random_str: str = ''.join(choice(ascii_letters) for _ in range(random_size_str))
+        random_size_str = randint(1, 100)
+        random_str = ''.join(choice(ascii_letters) for _ in range(random_size_str))
         element_profile = self.find(self.locators.PROFILE_LOCATOR)
         element_profile.click()
         element_input_fio = self.find(self.locators.INPUT_FIO)

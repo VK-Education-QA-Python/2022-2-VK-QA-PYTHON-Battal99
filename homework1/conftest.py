@@ -23,7 +23,7 @@ def driver(config, request):
     if request.config.option.headless:
         options.add_argument('--headless')
     driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
-    driver.set_window_size(1920, 1080)
+    driver.set_window_size(width=1920, height=1080)
     driver.get(URL)
 
     yield driver

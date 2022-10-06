@@ -19,7 +19,7 @@ class BasePageLocators:
     BILLING_LOCATOR = (By.XPATH, "//li[3]/a[contains(@class, 'center-module-billing')]")
     SEGMENTS_LOCATOR = (By.XPATH, "//li[2]/a[contains(@class, 'center-module-segments')]")
     TOOLS_LOCATOR = (By.XPATH, "//li[7]/a[contains(@class, 'center-module-tools')]")
-
+    MAIN_CONTENT = (By.XPATH, '//div[contains(@class, "layout-module-pageContentWrap")]')
     BUTTON_PAYMENT_SUBMIT = (By.CLASS_NAME, "js-deposit-payment-submit")
     STATISTICS_LOCATOR_ON_PAGE_INFO = (By.CLASS_NAME, "js-align-info-bubble")
     TOOLS_LOCATOR_ON_PAGE_INSTRUCTION = (By.XPATH, '//div[contains(@class, "feeds-module-controls")]')

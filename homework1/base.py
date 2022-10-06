@@ -12,7 +12,7 @@ from homework1 import locators
 
 class BaseCase:
 
-    driver: WebElement = None
+    driver: WebElement
     locators = locators.BasePageLocators()
 
     @pytest.fixture(scope='function', autouse=True)
@@ -20,7 +20,7 @@ class BaseCase:
         """ Фикстура драйвера """
         self.driver = driver
 
-    def wait(self, timeout=None):
+    def wait(self, timeout=None) -> WebDriverWait:
         if timeout is None:
             timeout = 10
         return WebDriverWait(self.driver, timeout=timeout)
@@ -31,7 +31,7 @@ class BaseCase:
     def log_in(self, login: str, password: str) -> bool:
         """ Метод входа входа в аккаунт """
         try:
-            self.find(self.locators.QUERY_LOCATOR).click()
+            self.click_element(self.find(self.locators.QUERY_LOCATOR))
             element_login_input = self.find(self.locators.INPUT_LOGIN)
             element_login_input.send_keys(login)
             element_password_input = self.find(self.locators.INPUT_PASSWORD)
@@ -46,10 +46,11 @@ class BaseCase:
     def log_out(self) -> bool:
         """ метод выхода с аккаунта """
         try:
-            elem_1 = self.find(self.locators.MAIL_LOCATOR)
-            self.click_element(elem_1)
-            elem_exit = self.find(self.locators.EXIT_BUTTON)
-            self.click_element(elem_exit)
+            if self.find(self.locators.MAIN_CONTENT).is_displayed():
+                elem_1 = self.find(self.locators.MAIL_LOCATOR)
+                self.click_element(elem_1)
+                elem_exit = self.find(self.locators.EXIT_BUTTON)
+                self.click_element(elem_exit)
         except NoSuchElementException:
 
             return False
