@@ -1,4 +1,3 @@
-import time
 from random import choice, randint
 from string import ascii_letters
 
@@ -16,19 +15,17 @@ class TestMyTarget(BaseCase):
         """ Тест входа в аккаунт"""
         successful_login: bool = self.log_in(LOGIN, PASSWORD)
 
-        assert successful_login is True
-
-        assert self.find(self.locators.MAIL_LOCATOR).is_displayed() is True
+        assert successful_login
+        assert self.find(self.locators.MAIL_LOCATOR).is_displayed()
 
     @pytest.mark.UI
     def test_logout(self):
         """ Тест выхода из аккаунта """
         self.log_in(LOGIN, PASSWORD)
-        logout = self.log_out()
+        successful_logout = self.log_out()
 
-        assert logout is True
-
-        assert self.find(self.locators.PROMO_MAIN_PAGE).is_displayed() is True
+        assert successful_logout
+        assert self.find(self.locators.LOGIN_LOCATOR).is_displayed()
 
     @pytest.mark.UI
     def test_invalid_email_login(self):
@@ -37,8 +34,7 @@ class TestMyTarget(BaseCase):
         element_error_title = self.find(self.locators.ERROR_LOGIN)
 
         assert element_error_title.text == 'Error'
-
-        assert self.find(self.locators.ERROR_LOCATOR).is_displayed() is True
+        assert self.find(self.locators.ERROR_LOCATOR).is_displayed()
 
     @pytest.mark.UI
     def test_invalid_password_login(self):
@@ -47,8 +43,7 @@ class TestMyTarget(BaseCase):
         element_error_title = self.find(self.locators.ERROR_LOGIN)
 
         assert element_error_title.text == 'Error'
-
-        assert self.find(self.locators.ERROR_LOCATOR).is_displayed() is True
+        assert self.find(self.locators.ERROR_LOCATOR).is_displayed()
 
     @pytest.mark.UI
     def test_edit_profile(self):
@@ -57,12 +52,12 @@ class TestMyTarget(BaseCase):
 
         random_size_str = randint(1, 100)
         random_str = ''.join(choice(ascii_letters) for _ in range(random_size_str))
+
         element_profile = self.find(self.locators.PROFILE_LOCATOR)
         element_profile.click()
         element_input_fio = self.find(self.locators.INPUT_FIO)
         element_input_fio.clear()
         element_input_fio.send_keys(random_str)
-
         element_button_save = self.find(self.locators.BUTTON_SAVE)
         element_button_save.click()
 
@@ -88,8 +83,5 @@ class TestMyTarget(BaseCase):
         """ Тест на переход на страницы портала через кнопки в шапке меню """
         self.log_in(LOGIN, PASSWORD)
 
-        assert self.page_transition(first_portal_page, locator_on_first_page) \
-                   .is_displayed() is True
-
-        assert self.page_transition(second_portal_page, locator_on_second_page) \
-                   .is_displayed() is True
+        assert self.page_transition(first_portal_page, locator_on_first_page).is_displayed()
+        assert self.page_transition(second_portal_page, locator_on_second_page).is_displayed()

@@ -31,7 +31,7 @@ class BaseCase:
     def log_in(self, login: str, password: str) -> bool:
         """ Метод входа входа в аккаунт """
         try:
-            self.click_element(self.find(self.locators.QUERY_LOCATOR))
+            self.click_element(self.find(self.locators.LOGIN_LOCATOR))
             element_login_input = self.find(self.locators.INPUT_LOGIN)
             element_login_input.send_keys(login)
             element_password_input = self.find(self.locators.INPUT_PASSWORD)
