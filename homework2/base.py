@@ -20,11 +20,11 @@ class BaseCase:
         self.base_page: BasePage = BasePage(driver=driver)
         self.dashboard_page: DashboardPage = DashboardPage(driver=driver)
 
-        # self.login_page = LoginPage(driver)
-        # if self.authorize:
-        #     cookies = request.getfixturevalue('cookies')
-        #     for cookie in cookies:
-        #         self.driver.add_cookie(cookie)
-        #
-        #     self.driver.refresh()
+        self.login_page = LoginPage(driver)
+        if self.authorize:
+            cookies = request.getfixturevalue('cookies')
+            for cookie in cookies:
+                self.driver.add_cookie(cookie)
+
+            self.driver.refresh()
 

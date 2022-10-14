@@ -10,6 +10,9 @@ from pages.base_page import BasePage
 
 
 # from pages.login_page import LoginPage
+class DashboardPageException(Exception):
+    ...
+
 
 class LoginPage(BasePage):
 
@@ -26,10 +29,6 @@ class LoginPage(BasePage):
             return False
 
         return DashboardPage(driver=self.driver)
-
-
-class DashboardPageException(Exception):
-    ...
 
 
 class DashboardPage(BasePage):
