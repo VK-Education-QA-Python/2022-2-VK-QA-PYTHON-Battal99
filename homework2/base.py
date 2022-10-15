@@ -6,6 +6,7 @@ from pages.dashboard_page import DashboardPage, LoginPage
 
 
 # from ui.pages.main_page import MainPage
+from pages.segments_page import SegmentPage
 
 
 class BaseCase:
@@ -19,6 +20,7 @@ class BaseCase:
 
         self.base_page: BasePage = BasePage(driver=driver)
         self.dashboard_page: DashboardPage = DashboardPage(driver=driver)
+        self.segment_page: SegmentPage = SegmentPage(driver=driver)
 
         self.login_page = LoginPage(driver)
         if self.authorize:

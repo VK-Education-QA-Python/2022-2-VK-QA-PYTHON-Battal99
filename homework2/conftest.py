@@ -8,6 +8,7 @@ from pages.dashboard_page import LoginPage
 from settings import LOGIN, PASSWORD
 from _pytest.fixtures import FixtureRequest
 
+
 def pytest_addoption(parser):
     parser.addoption("--headless", action='store_true')
 
@@ -34,12 +35,10 @@ def driver(config, request):
 
 @pytest.fixture(scope='session')
 def cookies(request: FixtureRequest):
-    # import pdb; pdb.set_trace()
     driver = request.getfixturevalue('driver')
     login_page = LoginPage(driver)
     login_page.log_in(LOGIN, PASSWORD)
-    # import pdb; pdb.set_trace()
     cookies = driver.get_cookies()
-    # driver.quit()
     driver.get("https://target-sandbox.my.com/dashboard")
+
     return cookies

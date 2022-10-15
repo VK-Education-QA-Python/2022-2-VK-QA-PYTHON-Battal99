@@ -9,7 +9,6 @@ from locators import basic_locators
 from pages.base_page import BasePage
 
 
-# from pages.login_page import LoginPage
 class DashboardPageException(Exception):
     ...
 
@@ -36,8 +35,7 @@ class DashboardPage(BasePage):
     locators_create_campaign = basic_locators.CampaignNewLocators()
     url = "https://target-sandbox.my.com/dashboard"
 
-    def create_new_campaign(self):
-        # self.log_in("batal990@mail.ru", "9Gq*686vJcYRtK")
+    def create_new_campaign(self, name: str):
         try:
             self.find(self.locators_create_campaign.CREATE_NEW_CAMPAIGN).click()
 
@@ -52,14 +50,13 @@ class DashboardPage(BasePage):
 
             name_campaign = self.find(self.locators_create_campaign.INPUT_NAME_CAMPAIGN)
             name_campaign.clear()
-            name_campaign.send_keys("Test")
+            name_campaign.send_keys(name)
 
             header_ad = self.find(self.locators_create_campaign.INPUT_PLACEHOLDER_HEADER)
             header_ad.send_keys(self.random_str())
 
             text_ad = self.find(self.locators_create_campaign.INPUT_AD)
             text_ad.send_keys(self.random_str())
-            # load_pictures_button = self.find(self.locators_create_campaign.LOAD_PICTURES)
 
             load_pictures_button = self.driver.find_element(*self.locators_create_campaign.LOAD_PICTURES)
             load_pictures_button.send_keys(os.getcwd()+"/files/p.png")
@@ -73,8 +70,4 @@ class DashboardPage(BasePage):
         return True
 
 
-    @staticmethod
-    def random_str():
-        random_size_str = randint(1, 25)
-        random_str = 'A'+''.join(choice(ascii_letters) for _ in range(random_size_str))
-        return random_str
+

@@ -1,3 +1,6 @@
+from random import randint, choice
+from string import ascii_letters
+
 import pytest
 from retry import retry
 from selenium.common.exceptions import NoSuchElementException
@@ -55,3 +58,9 @@ class BasePage(object):
     def click_element(self, element: WebElement):
         if element.is_displayed():
             element.click()
+
+    @staticmethod
+    def random_str():
+        random_size_str = randint(1, 25)
+        random_str = 'A'+''.join(choice(ascii_letters) for _ in range(random_size_str))
+        return random_str

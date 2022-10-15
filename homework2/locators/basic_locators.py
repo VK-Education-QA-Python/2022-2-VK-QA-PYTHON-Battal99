@@ -52,7 +52,36 @@ class CampaignNewLocators(DashboardLocators):
     SAVE_BUTTON_PIC = (By.XPATH, "//input[contains(@class,'image-cropper__save')]")
     SUBMIT_BANNER_BUTTON = (By.XPATH, "//button[@cid='view642']")
     INPUT_NAME_CAMPAIGN = (By.XPATH, "//input[contains(@class, 'input__inp')]")
-    UPLOAD_AUDIO_FILE = (By.XPATH, "//div[contains(@class, 'roles-module-uploadButton')]")
+    # UPLOAD_AUDIO_FILE = (By.XPATH, "//div[contains(@class, 'roles-module-uploadButton')]")
     # UPLOAD_PICTURES = (By.XPATH, "//div[contains(@class, 'upload-module-dropArea'")
     BUTTON_CREATE_CAMPAIGN = (By.XPATH, "//div[contains(@class , 'button__text' ")
     NAME_CAMPAIGN = (By.XPATH, "//a[contains(@class,'nameCell-module-campaignNameLink')]")
+
+
+class SegmentsLocator(DashboardLocators):
+
+    button_create_segment = (By.XPATH, "//button[@data-class-name='Submit']")
+    APP_GAMES = (By.XPATH, "//div[@class='adding-segments-item']")
+    CHECK_BOX = (By.XPATH, "//input[contains(@class,'adding-segments-source__checkbox')]")
+    ADD_SEGMENT = (By.XPATH, "//div[contains(@class, 'adding-segments-modal__btn-wrap')]")
+    BUTTON_CREATE_NEW_SEGMENT = (By.XPATH, "//button[contains(@class,'button_submit')]")
+    TITLE_SEGMENT = (By.XPATH, "//div[@data-row-id='central-0']")
+    NAME_SEGMENT = (By.XPATH, "//input[@data-translated-attr='placeholder' and @maxlength='60']")
+
+    DATA_SOURCE_GROUP_VK = (By.XPATH, "//a[contains(@href,'/segments/groups_list')]")
+    INPUT_GROUP_VK = (By.XPATH, "//input[contains(@class,'multiSelectSuggester-module-searchInput')]")
+    SHOW_GROUP_VK = (By.XPATH, "//div[@data-test='show']")
+    VK_EDUCATION = (By.XPATH, "//span[contains(@class, 'optionsList-module-text')]")
+    BUTTON_SUBMIT_GROUP = (By.XPATH, "//div[@data-test='add_selected_items_button']")
+    CHECK_ADD_VK_GROUP = (By.XPATH, "//span[@title='VK Образование'")
+
+    ADD_SEGMENT_VK = (By.XPATH, "//div[1]/div[10][@class='adding-segments-item']")
+
+    SEARCH_SEGMENT = (By.XPATH, "//input[contains(@class,'suggester-module-searchInput')]")
+
+    DELETE_SEGMENT = (By.XPATH, "//li[@data-id='remove']")
+
+    BUTTON_ACTION = (By.XPATH, "//span[contains(@class, 'select-module-itemInner')]")
+    REMOVE_SOURCE = (By.XPATH, "//div[contains(@class, 'remove-source-wrap')]")
+
+    BUTTON_REMOVE_SOURCE = (By.XPATH, "//button[contains(@class, 'button_confirm-remove')]")
