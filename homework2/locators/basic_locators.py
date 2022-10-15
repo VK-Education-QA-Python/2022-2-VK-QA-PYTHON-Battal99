@@ -83,5 +83,5 @@ class SegmentsLocator(DashboardLocators):
 
     BUTTON_ACTION = (By.XPATH, "//span[contains(@class, 'select-module-itemInner')]")
     REMOVE_SOURCE = (By.XPATH, "//div[contains(@class, 'remove-source-wrap')]")
-
+    SEGMENTS_CHECKBOX = (By.XPATH, "//input[contains(@class, 'segmentsTable-module-idCellCheckbox')]")
     BUTTON_REMOVE_SOURCE = (By.XPATH, "//button[contains(@class, 'button_confirm-remove')]")

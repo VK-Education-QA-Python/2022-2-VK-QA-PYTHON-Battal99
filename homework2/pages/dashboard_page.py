@@ -1,7 +1,7 @@
 import os
 from random import randint, choice
 from string import ascii_letters
-
+import allure
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
@@ -35,6 +35,7 @@ class DashboardPage(BasePage):
     locators_create_campaign = basic_locators.CampaignNewLocators()
     url = "https://target-sandbox.my.com/dashboard"
 
+    @allure.step("Step 2 - method create new campaign")
     def create_new_campaign(self, name: str):
         try:
             self.find(self.locators_create_campaign.CREATE_NEW_CAMPAIGN).click()

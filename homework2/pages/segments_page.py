@@ -1,4 +1,4 @@
-import time
+import allure
 
 from locators import basic_locators
 
@@ -12,6 +12,7 @@ class SegmentsPageException(Exception):
 
 
 class SegmentPage(BasePage):
+
     locator_segment = basic_locators.SegmentsLocator()
     url = "https://target-sandbox.my.com/segments"
 
@@ -38,26 +39,19 @@ class SegmentPage(BasePage):
         check_box.click()
         return True
 
+    @allure.step("Step 2 - add new segment")
     def add_new_segments(self):
 
         try:
-            # segment_page = self.find(self.locator_segment.SEGMENTS_LOCATOR)
-            # segment_page.click()
             self.open_segment_page()
 
-            # button_create_segment = self.find(self.locator_segment.button_create_segment)
-            # button_create_segment.click()
             self.create_segment_button()
 
             app_and_games = self.find(self.locator_segment.APP_GAMES)
             app_and_games.click()
 
-            # check_box = self.find(self.locator_segment.CHECK_BOX)
-            # check_box.click()
             self.input_check_box(self.locator_segment.CHECK_BOX)
 
-            # add_segment = self.find(self.locator_segment.ADD_SEGMENT)
-            # add_segment.click()
             self.add_submit_segment()
 
         except SegmentsPageException as ex:
@@ -65,6 +59,7 @@ class SegmentPage(BasePage):
 
         return True
 
+    @allure.step("Step 3 - create new segment")
     def create_new_segment(self, name: str):
         try:
             name_segment = self.find(self.locator_segment.NAME_SEGMENT)
@@ -77,12 +72,11 @@ class SegmentPage(BasePage):
 
         return True
 
+    @allure.step("Step 2 - add source VK Group")
     def add_source_group(self):
 
         try:
             self.open_segment_page()
-            # segment_page = self.find(self.locator_segment.SEGMENTS_LOCATOR)
-            # segment_page.click()
 
             self.find(self.locator_segment.DATA_SOURCE_GROUP_VK).click()
 
@@ -100,33 +94,20 @@ class SegmentPage(BasePage):
 
         return True
 
+    @allure.step("Step 3 - create segment VK Group")
     def create_segment_vk_group(self):
-        # --
         self.open_segment_page()
-
-        # import pdb; pdb.set_trace()
-
-        # button_create_segment = self.find(self.locator_segment.button_create_segment)
-        # button_create_segment.click()
-        # --
 
         self.create_segment_button()
 
         vk_group = self.find(self.locator_segment.ADD_SEGMENT_VK)
         vk_group.click()
 
-        # check_box = self.find(self.locator_segment.CHECK_BOX)
-        # check_box.click()
-        time.sleep(1)
         self.input_check_box(self.locator_segment.CHECK_BOX)
 
-        # --
-        # submit_segment = self.find(self.locator_segment.ADD_SEGMENT)
-        # submit_segment.click()
-        # --
-        time.sleep(1)
         self.add_submit_segment()
 
+    @allure.step("Step 4 - delete segment VK Group")
     def delete_segment(self, name: str):
 
         if name:
@@ -135,7 +116,7 @@ class SegmentPage(BasePage):
                 search_segment = self.find(self.locator_segment.SEARCH_SEGMENT)
                 search_segment.send_keys(id_segment)
                 self.find((By.XPATH, f"//li[@data-test='{id_segment}']")).click()
-                self.input_check_box((By.XPATH, "//input[contains(@class, 'segmentsTable-module-idCellCheckbox')]"))
+                self.input_check_box(self.locator_segment.SEGMENTS_CHECKBOX)
                 button_action = self.find(self.locator_segment.BUTTON_ACTION)
                 button_action.click()
                 delete_segment = self.find(self.locator_segment.DELETE_SEGMENT)
@@ -144,6 +125,7 @@ class SegmentPage(BasePage):
 
         return False
 
+    @allure.step("Step 5 - delete source VK Group")
     def delete_vk_group(self):
         try:
             self.open_segment_page()
