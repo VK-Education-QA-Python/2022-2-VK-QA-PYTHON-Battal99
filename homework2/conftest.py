@@ -136,4 +136,3 @@ def pytest_configure(config):
         os.makedirs(base_dir)
 
     config.base_temp_dir = base_dir
-
