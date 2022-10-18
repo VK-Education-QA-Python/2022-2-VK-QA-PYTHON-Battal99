@@ -4,36 +4,65 @@ import shutil
 import sys
 
 import pytest
+from _pytest.fixtures import FixtureRequest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
 from pages.dashboard_page import LoginPage
-from settings import LOGIN, PASSWORD
-from _pytest.fixtures import FixtureRequest
+from settings import LOGIN, PASSWORD, URL_DASHBOARD
 
 
 def pytest_addoption(parser):
     parser.addoption("--headless", action='store_true')
     parser.addoption('--debug_log', action='store_true')
+    parser.addoption('--selenoid', action='store_true')
+    parser.addoption('--vnc', action='store_true')
 
 
 @pytest.fixture()
 def config(request):
     headless = request.config.getoption("--headless")
     debug_log = request.config.getoption('--debug_log')
+    if request.config.getoption('--selenoid'):
+        if request.config.getoption('--vnc'):
+            vnc = True
+        else:
+            vnc = False
+        selenoid = 'http://127.0.0.1:4444/wd/hub'
+    else:
+        selenoid = None
+        vnc = False
     return {"headless": headless,
-            "debug_log": debug_log}
+            "debug_log": debug_log,
+            'selenoid': selenoid,
+            'vnc': vnc}
 
 
 @pytest.fixture(scope='function')
 def driver(config, request, temp_dir):
+    selenoid = config['selenoid']
+    vnc = config['vnc']
     options = Options()
+    options.add_experimental_option("prefs", {"download.default_directory": temp_dir})
     if request.config.option.headless:
         options.add_argument('--headless')
-    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
+    if selenoid:
+        capabilities = {
+            'browserName': 'chrome',
+            'version': '106.0'
+        }
+        if vnc:
+            capabilities['enableVNC'] = True
+        driver = webdriver.Remote(
+            'http://127.0.0.1:4444/wd/hub',
+            options=options,
+            desired_capabilities=capabilities
+        )
+    else:
+        driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
     driver.set_window_size(width=1920, height=1080)
-    driver.get("https://target-sandbox.my.com/dashboard")
+    driver.get(URL_DASHBOARD)
 
     yield driver
 
@@ -46,7 +75,7 @@ def cookies(request: FixtureRequest):
     login_page = LoginPage(driver)
     login_page.log_in(LOGIN, PASSWORD)
     cookies = driver.get_cookies()
-    driver.get("https://target-sandbox.my.com/dashboard")
+    driver.get(URL_DASHBOARD)
 
     return cookies
 

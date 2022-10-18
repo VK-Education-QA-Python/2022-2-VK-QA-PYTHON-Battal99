@@ -15,7 +15,6 @@ from locators.basic_locators import BasePageLocators
 class BasePage(object):
 
     locators = BasePageLocators()
-    # url = "https://target-sandbox.my.com/"
 
     def __init__(self, driver):
         self.driver = driver

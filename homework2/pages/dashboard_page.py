@@ -1,16 +1,11 @@
 import os
-from random import randint, choice
-from string import ascii_letters
+
 import allure
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
 
 from locators import basic_locators
 from pages.base_page import BasePage
-
-
-class DashboardPageException(Exception):
-    ...
 
 
 class LoginPage(BasePage):
@@ -24,7 +19,7 @@ class LoginPage(BasePage):
             element_password_input = self.find(self.locators.INPUT_PASSWORD)
             element_password_input.send_keys(password)
             element_password_input.send_keys(Keys.ENTER)
-        except NoSuchElementException:
+        except TimeoutException:
             return False
 
         return DashboardPage(driver=self.driver)
@@ -33,7 +28,11 @@ class LoginPage(BasePage):
 class DashboardPage(BasePage):
 
     locators_create_campaign = basic_locators.CampaignNewLocators()
-    url = "https://target-sandbox.my.com/dashboard"
+
+    @allure.step("upload file")
+    def upload_file(self, locator, path):
+        upload_file = self.driver.find_element(*locator)
+        upload_file.send_keys(os.getcwd() + path)
 
     @allure.step("Step 2 - method create new campaign")
     def create_new_campaign(self, name: str):
@@ -59,16 +58,12 @@ class DashboardPage(BasePage):
             text_ad = self.find(self.locators_create_campaign.INPUT_AD)
             text_ad.send_keys(self.random_str())
 
-            load_pictures_button = self.driver.find_element(*self.locators_create_campaign.LOAD_PICTURES)
-            load_pictures_button.send_keys(os.getcwd()+"/files/p.png")
+            self.upload_file(self.locators_create_campaign.LOAD_PICTURES, "/files/p.png")
 
             self.find(self.locators_create_campaign.SAVE_BUTTON_PIC).click()
             self.find(self.locators_create_campaign.SUBMIT_BANNER_BUTTON).click()
 
-        except DashboardPageException as ex:
+        except TimeoutException as ex:
             return ex
 
         return True
-
-
-

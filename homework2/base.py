@@ -1,13 +1,11 @@
 import os
+
 import allure
 import pytest
 from _pytest.fixtures import FixtureRequest
 
-from conftest import logger
 from pages.base_page import BasePage
 from pages.dashboard_page import DashboardPage, LoginPage
-
-
 # from ui.pages.main_page import MainPage
 from pages.segments_page import SegmentPage
 

@@ -28,7 +28,6 @@ class BasePageLocators:
 
 
 class DashboardLocators:
-    # CREATE_NEW_CAMPAIGN = (By.XPATH, "//a[contains(@href, '/campaign/new')]")
     CREATE_NEW_CAMPAIGN = (By.XPATH, "//div[contains(@class, 'button-module-textWrapper')]")
     PROFILE_LOCATOR = (By.XPATH, "//a[contains(@href, '/profile')]")
     PRO_LOCATOR = (By.XPATH, "//a[contains(@href, '/pro')]")
@@ -43,18 +42,14 @@ class CampaignNewLocators(DashboardLocators):
     AUDIO_ADV = (By.XPATH, "//div[contains(@class, '_audiolistening')]")
     PRODUCT_VK = (By.XPATH, "//div[contains(@class, '_general_ttm')]")
     TIZER = (By.XPATH, "//div[contains(@class, 'pac-id-451')]")
-    INPUT_PLACEHOLDER_LINK = (By.XPATH, "//input[contains(@class, 'suggester-module-searchInput')]")  # https://genius.com
+    INPUT_PLACEHOLDER_LINK = (By.XPATH, "//input[contains(@class, 'suggester-module-searchInput')]")
     INPUT_PLACEHOLDER_HEADER = (By.XPATH, "//input[contains(@data-name, 'title_25')]")
-    # INPUT_PLACEHOLDER_HEADER = (By.NAME, "title_25")
     INPUT_AD = (By.XPATH, "//textarea[@data-name='text_90']")
-    LOAD_PICTURES = (By.XPATH, "//div/input[@type='file' and @data-test='image_90x75']")  # @data-test='button' and
+    LOAD_PICTURES = (By.XPATH, "//div/input[@type='file' and @data-test='image_90x75']")
     LOAD_PICTURES2 = (By.XPATH, "//input[@type='button' and @pseudo='file-selector-button']")
     SAVE_BUTTON_PIC = (By.XPATH, "//input[contains(@class,'image-cropper__save')]")
     SUBMIT_BANNER_BUTTON = (By.XPATH, "//button[@cid='view642']")
     INPUT_NAME_CAMPAIGN = (By.XPATH, "//input[contains(@class, 'input__inp')]")
-    # UPLOAD_AUDIO_FILE = (By.XPATH, "//div[contains(@class, 'roles-module-uploadButton')]")
-    # UPLOAD_PICTURES = (By.XPATH, "//div[contains(@class, 'upload-module-dropArea'")
-    BUTTON_CREATE_CAMPAIGN = (By.XPATH, "//div[contains(@class , 'button__text' ")
     NAME_CAMPAIGN = (By.XPATH, "//a[contains(@class,'nameCell-module-campaignNameLink')]")
 
 
@@ -75,12 +70,9 @@ class SegmentsLocator(DashboardLocators):
     BUTTON_SUBMIT_GROUP = (By.XPATH, "//div[@data-test='add_selected_items_button']")
     CHECK_ADD_VK_GROUP = (By.XPATH, "//span[@title='VK Образование'")
 
-    ADD_SEGMENT_VK = (By.XPATH, "//div[1]/div[10][@class='adding-segments-item']")
-
+    ADD_SEGMENT_VK = (By.XPATH, "//div[10][@class='adding-segments-item']")
     SEARCH_SEGMENT = (By.XPATH, "//input[contains(@class,'suggester-module-searchInput')]")
-
     DELETE_SEGMENT = (By.XPATH, "//li[@data-id='remove']")
-
     BUTTON_ACTION = (By.XPATH, "//span[contains(@class, 'select-module-itemInner')]")
     REMOVE_SOURCE = (By.XPATH, "//div[contains(@class, 'remove-source-wrap')]")
     SEGMENTS_CHECKBOX = (By.XPATH, "//input[contains(@class, 'segmentsTable-module-idCellCheckbox')]")
