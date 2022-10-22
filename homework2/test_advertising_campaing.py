@@ -9,7 +9,7 @@ class TestAdvertisingCampaign(BaseCase):
     authorize = True
 
     @pytest.mark.UI
-    @allure.step("Step 1 - Create new campaign")
+    @allure.step("Create new campaign")
     @allure.issue("Task 1")
     @allure.description("Test to create an advertising campaign "
                         "of any type and check that it is created")

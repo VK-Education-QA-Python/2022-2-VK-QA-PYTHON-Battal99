@@ -6,7 +6,6 @@ from _pytest.fixtures import FixtureRequest
 
 from pages.base_page import BasePage
 from pages.dashboard_page import DashboardPage, LoginPage
-# from ui.pages.main_page import MainPage
 from pages.segments_page import SegmentPage
 
 

@@ -12,4 +12,4 @@
 * Написал тест на создание сегмента с типом "Приложения и игры в соцсетях" и проверил что сегмент создан
 * Написал тест на создание сегмента, добавив в источники данных группу VK образования. После этого создал сегмент (как и в п.2) с типом "Группы OK и VK", проверил, что он есть, а затем удалил именно этот сегмент и добавленный источник данных
 * реализован на паттерне PageObject
-* Selenoid - https://drive.google.com/file/d/1YNYPPTvieDh3Rp66u_bF3WGGGS5HBFUb/view?usp=sharing
+* Selenoid - https://drive.google.com/file/d/1zfVQBCe-bdua9g1tQwCYKLKLwE73FCez/view?usp=sharing

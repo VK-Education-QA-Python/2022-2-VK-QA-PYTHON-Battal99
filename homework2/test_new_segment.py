@@ -9,7 +9,7 @@ class TestSegments(BaseCase):
     authorize = True
 
     @pytest.mark.UI
-    @allure.step("Step1 - Test create new segment")
+    @allure.step("Test create new segment")
     @allure.issue("Task 2")
     @allure.description("Test to create a segment in audiences with the type Apps and games "
                         "in social networks and check that the segment")
@@ -23,7 +23,7 @@ class TestSegments(BaseCase):
         assert self.segment_page.find((By.XPATH, f"//a[@title='{name}']")).get_attribute('title') == name
 
     @pytest.mark.UI
-    @allure.step("Step1 - Test create new segment group")
+    @allure.step("Test create new segment group")
     @allure.issue("Task 3")
     @allure.description("Test for creating a segment by adding the VK education group to the data sources."
                         " After that, you need to create a segment with the Groups type OK and VK, check that it "

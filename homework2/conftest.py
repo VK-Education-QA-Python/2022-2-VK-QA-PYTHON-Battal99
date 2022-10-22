@@ -17,7 +17,6 @@ def pytest_addoption(parser):
     parser.addoption("--headless", action='store_true')
     parser.addoption('--debug_log', action='store_true')
     parser.addoption('--selenoid', action='store_true')
-    parser.addoption('--vnc', action='store_true')
 
 
 @pytest.fixture()
@@ -25,35 +24,31 @@ def config(request):
     headless = request.config.getoption("--headless")
     debug_log = request.config.getoption('--debug_log')
     if request.config.getoption('--selenoid'):
-        if request.config.getoption('--vnc'):
-            vnc = True
-        else:
-            vnc = False
         selenoid = 'http://127.0.0.1:4444/wd/hub'
     else:
         selenoid = None
-        vnc = False
     return {"headless": headless,
             "debug_log": debug_log,
-            'selenoid': selenoid,
-            'vnc': vnc}
+            'selenoid': selenoid
+            }
 
 
 @pytest.fixture(scope='function')
 def driver(config, request, temp_dir):
     selenoid = config['selenoid']
-    vnc = config['vnc']
     options = Options()
     options.add_experimental_option("prefs", {"download.default_directory": temp_dir})
     if request.config.option.headless:
         options.add_argument('--headless')
     if selenoid:
         capabilities = {
-            'browserName': 'chrome',
-            'version': '106.0'
+            "browserName": "chrome",
+            "browserVersion": "106.0",
+            "selenoid:options": {
+                "enableVNC": True,
+                "enableVideo": True
+            }
         }
-        if vnc:
-            capabilities['enableVNC'] = True
         driver = webdriver.Remote(
             'http://127.0.0.1:4444/wd/hub',
             options=options,
@@ -98,7 +93,8 @@ def base_temp_dir():
 
 @pytest.fixture(scope='function')
 def temp_dir(request):
-    test_dir = os.path.join(request.config.base_temp_dir, request._pyfuncitem.nodeid)
+    test_name = request._pyfuncitem.nodeid.replace('/', '_').replace(':', '_')
+    test_dir = os.path.join(request.config.base_temp_dir, test_name)
     os.makedirs(test_dir)
     return test_dir
 

@@ -1,5 +1,6 @@
-from random import randint, choice
-from string import ascii_letters
+import uuid
+from random import choice
+from string import ascii_uppercase
 
 import pytest
 from retry import retry
@@ -59,7 +60,6 @@ class BasePage(object):
             element.click()
 
     @staticmethod
-    def random_str():
-        random_size_str = randint(1, 25)
-        random_str = 'A'+''.join(choice(ascii_letters) for _ in range(random_size_str))
-        return random_str
+    def random_str() -> str:
+        uid = choice(ascii_uppercase) + str(uuid.uuid1())
+        return uid[:20]

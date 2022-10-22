@@ -1,5 +1,4 @@
 import allure
-from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
@@ -9,89 +8,65 @@ from settings import VK_EDUCATION
 
 
 class SegmentPage(BasePage):
-
     locator_segment = basic_locators.SegmentsLocator()
 
     def open_segment_page(self):
         segment_page = self.find(self.locator_segment.SEGMENTS_LOCATOR)
         segment_page.click()
-        return True
 
     def create_segment_button(self):
         """Кнопка создания сегмента """
         button_create_segment = self.find(self.locator_segment.button_create_segment)
         button_create_segment.click()
-        return True
 
     def add_submit_segment(self):
         """ кнопка добавления сегмента """
         add_segment = self.find(self.locator_segment.ADD_SEGMENT)
         add_segment.click()
-        return True
 
     def input_check_box(self, locator):
         """ Нажатие на checkbox"""
         check_box = self.find(locator)
         check_box.click()
-        return True
 
-    @allure.step("Step 2 - add new segment")
+    @allure.step("add new segment")
     def add_new_segments(self):
+        self.open_segment_page()
 
-        try:
-            self.open_segment_page()
+        self.create_segment_button()
 
-            self.create_segment_button()
+        app_and_games = self.find(self.locator_segment.APP_GAMES)
+        app_and_games.click()
+        self.input_check_box(self.locator_segment.CHECK_BOX)
 
-            app_and_games = self.find(self.locator_segment.APP_GAMES)
-            app_and_games.click()
-            self.input_check_box(self.locator_segment.CHECK_BOX)
-
-            self.add_submit_segment()
-
-        except TimeoutException as ex:
-            return ex
-
+        self.add_submit_segment()
         return True
 
-    @allure.step("Step 3 - create new segment")
+    @allure.step("create new segment")
     def create_new_segment(self, name: str):
-        try:
-            name_segment = self.find(self.locator_segment.NAME_SEGMENT)
-            name_segment.clear()
-            name_segment.send_keys(name)
-
-            self.find(self.locator_segment.BUTTON_CREATE_NEW_SEGMENT).click()
-        except TimeoutException as ex:
-            return ex
-
+        name_segment = self.find(self.locator_segment.NAME_SEGMENT)
+        name_segment.clear()
+        name_segment.send_keys(name)
+        self.find(self.locator_segment.BUTTON_CREATE_NEW_SEGMENT).click()
         return True
 
-    @allure.step("Step 2 - add source VK Group")
+    @allure.step("add source VK Group")
     def add_source_group(self):
-
-        try:
-            self.open_segment_page()
-
-            self.find(self.locator_segment.DATA_SOURCE_GROUP_VK).click()
-
-            input_group = self.find(self.locator_segment.INPUT_GROUP_VK)
-            input_group.send_keys(VK_EDUCATION)
-            group_vk = self.find(self.locator_segment.SHOW_GROUP_VK)
-            ActionChains(self.driver)\
-                .move_to_element(group_vk)\
-                .click()\
-                .perform()
-            self.find(self.locator_segment.VK_EDUCATION).click()
-            submit_group = self.find(self.locator_segment.BUTTON_SUBMIT_GROUP)
-            submit_group.click()
-
-        except TimeoutException as ex:
-            return ex
-
+        self.open_segment_page()
+        self.find(self.locator_segment.DATA_SOURCE_GROUP_VK).click()
+        input_group = self.find(self.locator_segment.INPUT_GROUP_VK)
+        input_group.send_keys(VK_EDUCATION)
+        group_vk = self.find(self.locator_segment.SHOW_GROUP_VK)
+        ActionChains(self.driver) \
+            .move_to_element(group_vk) \
+            .click() \
+            .perform()
+        self.find(self.locator_segment.VK_EDUCATION).click()
+        submit_group = self.find(self.locator_segment.BUTTON_SUBMIT_GROUP)
+        submit_group.click()
         return True
 
-    @allure.step("Step 3 - create segment VK Group")
+    @allure.step("create segment VK Group")
     def create_segment_vk_group(self):
         self.open_segment_page()
         self.create_segment_button()
@@ -100,7 +75,7 @@ class SegmentPage(BasePage):
         self.input_check_box(self.locator_segment.CHECK_BOX)
         self.add_submit_segment()
 
-    @allure.step("Step 4 - delete segment VK Group")
+    @allure.step("delete segment VK Group")
     def delete_segment(self, name: str):
 
         if name:
@@ -118,16 +93,12 @@ class SegmentPage(BasePage):
 
         return False
 
-    @allure.step("Step 5 - delete source VK Group")
+    @allure.step("delete source VK Group")
     def delete_vk_group(self):
-        try:
-            self.open_segment_page()
-            self.find(self.locator_segment.DATA_SOURCE_GROUP_VK).click()
-            remove_source_button = self.find(self.locator_segment.REMOVE_SOURCE)
-            remove_source_button.click()
-            confirm = self.find(self.locator_segment.BUTTON_REMOVE_SOURCE)
-            confirm.click()
-        except TimeoutException as ex:
-            return ex
-
+        self.open_segment_page()
+        self.find(self.locator_segment.DATA_SOURCE_GROUP_VK).click()
+        remove_source_button = self.find(self.locator_segment.REMOVE_SOURCE)
+        remove_source_button.click()
+        confirm = self.find(self.locator_segment.BUTTON_REMOVE_SOURCE)
+        confirm.click()
         return True
