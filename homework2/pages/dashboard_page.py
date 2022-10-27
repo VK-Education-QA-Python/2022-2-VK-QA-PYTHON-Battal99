@@ -1,9 +1,7 @@
-import os
-
 import allure
 from selenium.webdriver.common.keys import Keys
 
-
+from utils import file_path
 from locators import basic_locators
 from pages.base_page import BasePage
 
@@ -23,12 +21,19 @@ class LoginPage(BasePage):
 
 
 class DashboardPage(BasePage):
-
     locators_create_campaign = basic_locators.CampaignNewLocators()
+
+    def upload_file(self, locator: tuple, file_path: callable, name_file: str):
+        upload_file = self.driver.find_element(*locator)
+        upload_file.send_keys(file_path(name_file))
 
     @allure.step("method create new campaign")
     def create_new_campaign(self, name: str):
-        self.find(self.locators_create_campaign.CREATE_NEW_CAMPAIGN).click()
+        create_campaign = self.find(self.locators_create_campaign.CREATE_NEW_CAMPAIGN)
+        if create_campaign.is_displayed():
+            create_campaign.click()
+        else:
+            self.find(self.locators_create_campaign.CREATE_NEW_CAMPAIGN_HREF).click()
 
         product_vk = self.find(self.locators_create_campaign.PRODUCT_VK)
         product_vk.click()
@@ -48,9 +53,7 @@ class DashboardPage(BasePage):
 
         text_ad = self.find(self.locators_create_campaign.INPUT_AD)
         text_ad.send_keys(self.random_str())
-
-        upload_file = self.driver.find_element(*self.locators_create_campaign.LOAD_PICTURES)
-        upload_file.send_keys(os.getcwd() + '/files/p.png')
+        self.upload_file(self.locators_create_campaign.LOAD_PICTURES, file_path=file_path, name_file='p.png')
 
         self.find(self.locators_create_campaign.SAVE_BUTTON_PIC).click()
         self.find(self.locators_create_campaign.SUBMIT_BANNER_BUTTON).click()

@@ -29,6 +29,7 @@ class BasePageLocators:
 
 class DashboardLocators:
     CREATE_NEW_CAMPAIGN = (By.XPATH, "//div[contains(@class, 'button-module-textWrapper')]")
+    CREATE_NEW_CAMPAIGN_HREF = (By.XPATH, "//a[contains(@href, '/campaign/new')]")
     PROFILE_LOCATOR = (By.XPATH, "//a[contains(@href, '/profile')]")
     PRO_LOCATOR = (By.XPATH, "//a[contains(@href, '/pro')]")
     STATISTICS_LOCATOR = (By.XPATH, "//a[contains(@href, '/statistics')]")
