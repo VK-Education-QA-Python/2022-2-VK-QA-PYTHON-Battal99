@@ -3,12 +3,11 @@ from urllib.parse import urljoin
 
 import requests
 
-from api.ref import CONTINUE_LOCATION, LOGIN_REF, CREATE_SEGMENT, REF_CREATE_SEGMENT, CREATE_CAMPAIGN, \
+from api.location import CONTINUE_LOCATION, LOGIN_REF, CREATE_SEGMENT, REF_CREATE_SEGMENT, CREATE_CAMPAIGN, \
     REF_CREATE_CAMPAIGN, LOAD_FILE, REF_LOAD_FILE, DELETE_CAMPAIGN, REF_DELETE_CAMPAIGN, GET_CAMPAIGN, REF_GET_CAMPAIGN, \
-    REF_DELETE_SEGMENT, DELETE_SEGMENT, GET_URL, REF_GET_URL, CSRF, GET_SEGMENT, REF_GET_SEGMENT
-
-
-# from utils import file_path
+    REF_DELETE_SEGMENT, DELETE_SEGMENT, GET_URL, REF_GET_URL, CSRF, GET_SEGMENT, REF_GET_SEGMENT, GET_VK_GROUP, \
+    GET_GROUP_LIST
+from settings import VK_GROUP
 
 
 class ApiClientException(Exception):
@@ -30,8 +29,6 @@ class ApiClient:
 
         self.login = login
         self.password = password
-        self.mc = None
-        self.sdc = None
         self.csrftoken = None
         self.session = requests.Session()
 
@@ -49,15 +46,6 @@ class ApiClient:
         response = self._request('GET', CSRF, headers=headers, allow_redirects=True)
         self.csrftoken = response.cookies.get('csrftoken')
 
-    # def get_mc(self):
-    #     headers = {
-    #         'Referer': urljoin(self.base_url, 'dashboard')
-    #     }
-    #
-    #     response = self._request('GET', urljoin(self.base_url, 'dashboard'), headers=headers)
-    #     print(response.cookies)
-    #     self.csrftoken = response.cookies.get('mc')
-
     def post_login(self):
 
         headers = {
@@ -67,7 +55,6 @@ class ApiClient:
             'email': self.login,
             'password': self.password,
             'continue': urljoin(self.base_url, CONTINUE_LOCATION),
-            # 'continue': 'https://target-sandbox.my.com/auth/mycom?state=target_login%3D1%26ignore_opener%3D1%23email',
             'failure': 'https://account.my.com/login/'
         }
         resp = self._request('POST', LOGIN_REF, headers=headers, data=data, allow_redirects=True, join_url=False)
@@ -77,7 +64,7 @@ class ApiClient:
         return resp
 
     def _request(self, method, location, headers=None, data=None, params=None, files=None, allow_redirects=False,
-                 expected_status=200, join_url=True, jsonify=False):
+                 expected_status=200, join_url=True, jsonify=False, **kwargs):
 
         if join_url:
             url = urljoin(self.base_url, location)
@@ -85,10 +72,10 @@ class ApiClient:
             url = location
 
         res = self.session.request(method, url, headers=headers, data=data, params=params, files=files,
-                                   allow_redirects=allow_redirects)
+                                   allow_redirects=allow_redirects, **kwargs)
 
         if res.status_code != expected_status:
-            raise ResponseStatusCodeException(f'Got {res.status_code} {res.request} :"{url}"')
+            raise ResponseStatusCodeException(f'Got {res.status_code} {res.request} {res.headers} :"{url}"')
 
         if jsonify:
             json_response = res.json()
@@ -96,15 +83,20 @@ class ApiClient:
 
         return res
 
-    def post_create_segment(self, segment_name):
-        data = json.dumps(self.segment_data(segment_name))
-
+    def post_create_segment(self, segment_name, object_type):
+        vk_group = self.get_vk_group(VK_GROUP)
+        if object_type == 'vk_group'.lower():
+            data = json.dumps(self.segment_data_vk_group(segment_name, vk_group))
+        elif object_type == 'games'.lower():
+            data = json.dumps(self.segment_data_games(segment_name))
+        else:
+            raise ApiClientException("Wrong object_type")
         response = self._request('POST', CREATE_SEGMENT,
                                  headers=self.headers(REF_CREATE_SEGMENT), data=data, jsonify=True)
         return response.get('id')
 
     @staticmethod
-    def segment_data(name):
+    def segment_data_games(name):
         data = {
             "name": name,
             "logicType": "or",
@@ -122,34 +114,50 @@ class ApiClient:
         return data
 
     @staticmethod
-    def campaign_structure(name, image_id: int, url_id: int):
-        # return {"name": name, "read_only": False, "price": "1.55", "package_id": "451", "banners": [
-        #     {"urls": {"primary": {"id": url_id}},
-        #      "textblocks": {"title_25": {"text": "Vrvvfwrwrwrbe"}, "text_90": {"text": "Bebtbte"}},
-        #                     'banners': [{"content": {"image_90x75": {"id": image_id}},
-        #      "name": ""}]}
+    def segment_data_vk_group(name, vk_group_id=None):
+        data = {
+            "name": name,
+            "logicType": "or",
+            "pass_condition": 1,
+            "relations": [{
+                "object_type": "remarketing_vk_group",
+                "params": {
+                    'source_id': vk_group_id,
+                    "type": "positive"
+                }
+            }]
+        }
+
+        return data
+
+    @staticmethod
+    def campaign_data(name, image_id: int, url_id: int):
         return {
             'name': name,
+            'max_price': '0',
+            'mixing': 'fastest',
+            'autobidding_mode': 'second_price_mean',
             'objective': 'general_ttm',
             'package_id': 451,
             'price': '1.64',
+            'read_only': False,
+            'enable_utm': True,
             'banners': [{
                 'urls': {
                     'primary': {'id': url_id}
                 },
-                'textblocks': {'title_25': {'text': 'Bvfbbtb'}, 'text_90': {'text': 'Bebtabaabbte'},
-                               'cta_sites_full': {'text': 'visitSite'}},
+                'textblocks': {'title_25': {'text': 'Bvfbbtb'}, 'text_90': {'text': 'Bebtabaabbte'}},
                 'content': {
                     'image_90x75': {
                         'id': image_id
                     }
                 },
-                'name': '',
+                'name': ''
             }]
 
         }
 
-    def get_url(self):
+    def get_url_id(self):
         params = {
             'url': 'https://genius.com/'
         }
@@ -160,7 +168,7 @@ class ApiClient:
     def post_upload_file(self, file_path: callable):
         file = {
             'file': open(file_path('p.png'), 'rb'),
-            'data': '{"width": 0, "height": 0}'
+            'data': '{"width": 75, "height": 90}'
         }
 
         response = self._request('POST', LOAD_FILE, headers=self.headers(REF_LOAD_FILE),
@@ -168,11 +176,12 @@ class ApiClient:
         return response.get('id')
 
     def post_create_campaign(self, campaign_name, file_path: callable):
-        image_id = self.post_upload_file(file_path)
-        url_id = self.get_url()
-        data = json.dumps(self.campaign_structure(campaign_name, image_id, url_id))
+        image_id: int = self.post_upload_file(file_path)
+        url_id: int = self.get_url_id()
+        data = json.dumps(self.campaign_data(campaign_name, image_id, url_id))
 
-        response = self._request('POST', CREATE_CAMPAIGN, headers=self.headers(REF_CREATE_CAMPAIGN), data=data, jsonify=True)
+        response = self._request('POST', CREATE_CAMPAIGN, headers=self.headers(REF_CREATE_CAMPAIGN),
+                                 data=data, jsonify=True)
         return response.get('id')
 
     def post_delete_campaign(self, campaign_id):
@@ -200,15 +209,15 @@ class ApiClient:
 
         return response.get('name')
 
+    def get_vk_group(self, vk_group):
+        param = {
+            '_q': vk_group
+        }
+        response = self._request('GET', GET_VK_GROUP, headers=self.headers(GET_GROUP_LIST), params=param, jsonify=True)
+        return response.get('items')[0]['id']
+
     def _delete_segment(self, segment_id):
         response = self._request('DELETE', DELETE_SEGMENT.format(segment_id),
                                  headers=self.headers(REF_DELETE_SEGMENT), expected_status=204)
 
         return response
-
-
-# c = ApiClient("https://target-sandbox.my.com/", "batal990@mail.ru", "9Gq*686vJcYRtK")
-# # c.get_token()
-# c.post_login()
-#
-# print(c.csrftoken)
