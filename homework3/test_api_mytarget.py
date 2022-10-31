@@ -5,13 +5,13 @@ from base import ApiBase
 
 class TestApi(ApiBase):
 
-    @pytest.mark.API
-    def test_create_campaign(self, target_object_names):
-        campaign_id = self.create_campaign(target_object_names.campaign_name)
-
-        assert self.api_client.get_campaign(campaign_id, 200) == target_object_names.campaign_name
-
-        self.delete_campaign(campaign_id)
+    # @pytest.mark.API
+    # def test_create_campaign(self, target_object_names):
+    #     campaign_id = self.create_campaign(target_object_names.campaign_name)
+    #
+    #     assert self.api_client.get_campaign(campaign_id, 200) == target_object_names.campaign_name
+    #
+    #     self.delete_campaign(campaign_id)
 
     @pytest.mark.API
     def test_create_segment(self, target_object_names):
