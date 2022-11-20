@@ -13,4 +13,6 @@ def repo_root():
 
 @pytest.fixture(scope='session')
 def api_client():
-    return ApiClient(base_url=settings.URL, login=settings.LOGIN, password=settings.PASSWORD)
+    return ApiClient(base_url=settings.URL,
+                     login=settings.LOGIN,
+                     password=settings.PASSWORD)

@@ -8,7 +8,6 @@ fake = faker.Faker()
 class Builder:
     @staticmethod
     def target_names(campaign_name=None, segment_name=None):
-
         @dataclass
         class TargetName:
             campaign_name: str = None
