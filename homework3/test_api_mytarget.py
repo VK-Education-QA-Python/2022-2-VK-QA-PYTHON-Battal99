@@ -25,7 +25,7 @@ class TestApi(ApiBase):
     def test_delete_segment(self, target_object_names):
         segment_id = self.create_segment(target_object_names.segment_name)
 
-        assert self.delete_segment(segment_id)
+        self.delete_segment(segment_id)
 
         assert not self.api_client.get_segment(segment_id, 404)
 

@@ -29,8 +29,11 @@ from api.location import (
     GET_VK_GROUP,
     GET_GROUP_LIST, FAILURE_LOGIN,
 )
-# from payloads.payloads import Payloads
-from payloads.payloads import campaign_data, segment_data_vk_group, segment_data_games
+from payloads.payloads import (
+    campaign_data,
+    segment_data_vk_group,
+    segment_data_games,
+)
 from settings import VK_GROUP, URL_GENIUS
 
 
@@ -62,7 +65,6 @@ class ApiClient:
         self.csrftoken = response.cookies.get('csrftoken')
 
     def post_login(self):
-
         headers = {
             'Referer': self.base_url
         }
@@ -98,8 +100,6 @@ class ApiClient:
             url = urljoin(self.base_url, location)
         else:
             url = location
-        print(headers)
-        print(data)
         res = self.session.request(method, url,
                                    headers=headers,
                                    data=data,
@@ -107,7 +107,6 @@ class ApiClient:
                                    files=files,
                                    allow_redirects=allow_redirects,
                                    **kwargs)
-        print(res.text)
         if res.status_code != expected_status:
             raise ResponseStatusCodeException(
                 f'Got {res.status_code} {res.request} {res.headers} :"{url}"'
