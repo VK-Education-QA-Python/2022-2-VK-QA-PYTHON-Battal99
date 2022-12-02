@@ -1,0 +1,15 @@
+APP_HOST = '127.0.0.1'
+APP_PORT = '83'
+USERNAME = 'battal99'
+PASSWORD = 'hanika73'
+URL = "http://127.0.0.1:83"
+LINK_LINUX = 'https://getfedora.org/ru/workstation/download/'
+CENTOS = "https://www.centos.org/download/"
+PYTHON_HISTORY = 'https://en.wikipedia.org/wiki/History_of_Python'
+FLASK_DOC = 'https://flask.palletsprojects.com/en/1.1.x/#'
+WIRESHARK_NEWS = 'https://www.wireshark.org/news/'
+WIRESHARK_DOWNLOAD = "https://www.wireshark.org/#download"
+TCPDUMP_EXAMPLES = 'https://hackertarget.com/tcpdump-examples/'
+API_LINK = 'https://en.wikipedia.org/wiki/API'
+FUTURE_INTERNET_LINK = 'https://www.popularmechanics.com/technology/infrastructure/a29666802/future-of-the-internet/'
+SMTP_LINK = 'https://ru.wikipedia.org/wiki/SMTP'
