@@ -110,6 +110,29 @@ class TestReg(BaseCase):
         assert self.driver.current_url == self.reg_page.url
 
         assert self.reg_page.find(
-            self.reg_page.reg_locator.FLASH_INVALID_EMAIL
+            self.reg_page.reg_locator.FLASH
         ).is_displayed()
 
+    def test_long_password(self):
+        """ Негативный тест на email """
+        name = self.reg_page.random_str()
+        surname = self.reg_page.random_str()
+        middlename = self.reg_page.random_str()
+        username = self.reg_page.random_str(digit=True)
+        email = self.reg_page.random_str(digit=True)
+        password = self.reg_page.random_str(size=100, digit=True)
+        self.reg_page.create_user(
+            name=name,
+            surname=surname,
+            middlename=middlename,
+            username=username,
+            email=email,
+            password=password,
+            password_confirm=self.reg_page.random_str(digit=True)
+        )
+
+        assert self.driver.current_url == self.reg_page.url or "http://localhost:83/reg"
+
+        assert self.reg_page.find(
+            self.reg_page.reg_locator.FLASH
+        ).is_displayed()

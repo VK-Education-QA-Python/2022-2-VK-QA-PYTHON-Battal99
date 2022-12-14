@@ -7,6 +7,7 @@ class LoginPageLocators:
     BUTTON_LOGIN = (By.ID, 'submit')
     LINK_REG = (By.XPATH, "//a[contains(@href, '/reg')]")
     login_success_locator = (By.ID, 'login-name')
+    INVALID_USER = (By.ID, 'flash')
 
 
 class RegPageLocator(LoginPageLocators):
@@ -19,7 +20,7 @@ class RegPageLocator(LoginPageLocators):
     CHECKBOX_REG = (By.ID, 'term')
     BUTTON_REG = (By.ID, 'submit')
     EMAIL_REG = (By.ID, 'email')
-    FLASH_INVALID_EMAIL = (By.ID, 'flash')
+    FLASH = (By.ID, 'flash')
 
 
 class MainPageLocators(LoginPageLocators):

@@ -8,28 +8,47 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 from pages.login_page import LoginPage
-from settings import URL, USERNAME, PASSWORD
+from settings import URL, USERNAME, PASSWORD, LOCALHOST
 
 
 def pytest_addoption(parser):
-    parser.addoption("--headless", action='store_true')
+    # parser.addoption("--headless", action='store_true')
+    parser.addoption("--selenoid", action='store_true')
+    parser.addoption("--debug_log", action='store_true')
+    parser.addoption('--video_enable', action='store_true')
 
 
 @pytest.fixture()
 def config(request):
-    headless = request.config.getoption("--headless")
-
-    return headless
+    # headless = request.config.getoption("--headless")
+    debug_log = request.config.getoption("--debug_log")
+    video = request.config.getoption("--video_enable")
+    selenoid = "http://localhost:4444/wd/hub" if request.config.getoption('--selenoid') else None
+    return {'debug_log': debug_log, "selenoid": selenoid, 'video_enable': video}
 
 
 @pytest.fixture(scope='function')
-def driver(config, request):
+def driver(config):
     options = Options()
-    if request.config.option.headless:
-        options.add_argument('--headless')
-    driver = webdriver.Chrome(executable_path="/Users/batalabdulaev/Downloads/chromedriver 2", options=options)
-    driver.set_window_size(width=1920, height=1080)
-    driver.get(URL)
+    if config["selenoid"] is not None:
+        capabilities = {
+            "browserName": "chrome",
+            "browserVersion": "106.0",
+            # 'additionalNetworks': ["selenoid"],
+            "selenoid:options": {
+                "enableVNC": True if config['video_enable'] else False,
+                "enableVideo": True if config['video_enable'] else False,
+                "applicationContainers": ["myapp_project_myapp_1"],
+            }
+        }
+        driver = webdriver.Remote(command_executor=config["selenoid"], desired_capabilities=capabilities)
+        driver.set_window_size(width=1920, height=1080)
+        driver.get(URL)
+    else:
+        # os.environ['WDM_LOG_LEVEL'] = '0'
+        driver = webdriver.Chrome(executable_path="/Users/batalabdulaev/Downloads/chromedriver 2", options=options)
+        driver.set_window_size(width=1920, height=1080)
+        driver.get(LOCALHOST)
 
     yield driver
 
@@ -100,6 +119,3 @@ def login_ui(driver):
     page = LoginPage(driver)
     page.login(USERNAME, PASSWORD)
     yield page
-
-
-

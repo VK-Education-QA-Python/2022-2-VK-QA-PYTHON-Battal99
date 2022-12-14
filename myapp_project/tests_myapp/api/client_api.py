@@ -2,6 +2,7 @@ import json
 from urllib.parse import urljoin
 
 import requests
+import allure
 
 
 class ApiClient:
@@ -49,14 +50,17 @@ class ApiClient:
 
         return res
 
-    def post_login(self) -> requests.Response:
+    @allure.step("POST method login user")
+    def post_login(self, user=None, password=None) -> requests.Response:
         location = 'login'
         headers = {
             'Referer': self.base_url,
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-        body_payload =\
-            f'username={self.user}&password={self.password}&submit=Login"'
+        if user is None or password is None:
+            body_payload = f'username={self.user}&password={self.password}&submit=Login"'
+        else:
+            body_payload = f'username={user}&password={password}&submit=Login"'
         res = self._request(
             'POST',
             location=location,
@@ -73,6 +77,7 @@ class ApiClient:
 
         return res
 
+    @allure.step("POST method create user")
     def post_create_user(self, user) -> requests.Response:
         """  Создание пользователя """
         location = 'api/user'
@@ -85,27 +90,53 @@ class ApiClient:
             name=user.name,
             password=user.password,
             email=user.email,
-            surname=user.surname))
-        # data = json.dumps(dict(
-        #     username='battall1',
-        #     name='nsdfwrvewg',
-        #     password='wewfwe',
-        #     email='email@mail.ru',
-        #     surname='wfrvwrfw'))
+            surname=user.surname)
+        )
         res = self._request('POST', location, headers=headers, data=data)
-        print(res)
+
         return res
 
+    @allure.step("DELETE method delete user")
     def delete_user(self, user_name: str):
         location = f"/api/user/{user_name}"
         res = self._request('DELETE', location)
 
         return res  # 210 - а нужно 204
 
+    @allure.step("PUT method change password")
+    def put_change_password(self, user_name: str, new_password: str):
+        """ Смена пароля пользователя.
+        В случае успеха у пользователя меняется пароль;
+        Новый пароль не может совпадать с паролем из БД.
+        """
+        location = f"api/user/{user_name}/change-password"
+        headers = {
+            'Content-Type': "application/json",
+        }
 
-# a = ApiClient('127.0.0.1', '83', 'battal99', 'hanika73')
-# print(a.get_status_app())
-# print(a.post_login())
-# print(a.get_main_page())
-# # print(a.post_create_user())
-# print(a.delete_user('battall1'))
+        data = json.dumps({"password": new_password})
+
+        res = self._request('PUT', location, headers=headers, data=data)
+
+        return res
+
+    @allure.step("POST method block user")
+    def post_block_user(self, user_name: str):
+        """ Блокировка пользователя.
+        В случае успеха пользователю
+        проставляется access = 0 в БД.
+        """
+        location = f'api/user/{user_name}/block'
+        res = self._request('POST', location)
+
+        return res
+
+    @allure.step("POST method accept user")
+    def post_accept_user(self, user_name: str):
+        """ Разблокировка пользователя
+        В случае успеха пользователю проставляется access = 1 в БД.
+        """
+        location = f'api/user/{user_name}/accept'
+        res = self._request('POST', location)
+
+        return res
