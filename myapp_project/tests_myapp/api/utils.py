@@ -2,7 +2,6 @@ import allure
 from faker import Faker
 
 from orm.client_orm import MySqlClient
-# from settings import DB_NAME, DB_USER, DB_PASSWORD
 from settings import DB_NAME, DB_USER, DB_PASSWORD
 
 

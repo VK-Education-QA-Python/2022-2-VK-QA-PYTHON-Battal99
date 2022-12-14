@@ -12,7 +12,6 @@ from settings import URL, USERNAME, PASSWORD, LOCALHOST
 
 
 def pytest_addoption(parser):
-    # parser.addoption("--headless", action='store_true')
     parser.addoption("--selenoid", action='store_true')
     parser.addoption("--debug_log", action='store_true')
     parser.addoption('--video_enable', action='store_true')
@@ -20,7 +19,6 @@ def pytest_addoption(parser):
 
 @pytest.fixture()
 def config(request):
-    # headless = request.config.getoption("--headless")
     debug_log = request.config.getoption("--debug_log")
     video = request.config.getoption("--video_enable")
     selenoid = "http://localhost:4444/wd/hub" if request.config.getoption('--selenoid') else None
@@ -34,7 +32,6 @@ def driver(config):
         capabilities = {
             "browserName": "chrome",
             "browserVersion": "106.0",
-            # 'additionalNetworks': ["selenoid"],
             "selenoid:options": {
                 "enableVNC": True if config['video_enable'] else False,
                 "enableVideo": True if config['video_enable'] else False,
@@ -45,7 +42,6 @@ def driver(config):
         driver.set_window_size(width=1920, height=1080)
         driver.get(URL)
     else:
-        # os.environ['WDM_LOG_LEVEL'] = '0'
         driver = webdriver.Chrome(executable_path="/Users/batalabdulaev/Downloads/chromedriver 2", options=options)
         driver.set_window_size(width=1920, height=1080)
         driver.get(LOCALHOST)

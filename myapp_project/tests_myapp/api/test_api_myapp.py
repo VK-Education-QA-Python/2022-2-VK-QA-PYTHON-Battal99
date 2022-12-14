@@ -268,9 +268,12 @@ class TestApiMyApp:
 
         assert res.status_code == 304  # не изменилось
 
+    @allure.step('check active user')
+    @allure.issue("API test")
+    @allure.description("test to check activity")
     @pytest.mark.API
     def test_check_active_user(self):
-        """ Тест на проверку"""
+        """ Тест на проверку активности пользователя"""
         user = self.fake_user
         self.api_client.post_create_user(user)
         self.api_client.post_login(user.username, user.password)
